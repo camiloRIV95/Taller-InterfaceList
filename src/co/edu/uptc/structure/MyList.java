@@ -89,16 +89,13 @@ public class MyList<E> implements List<E>{
 		return rta;
 	}
 	
-	//Implementacion del metodo toArray
 	@Override
 	public <T> T[] toArray(T[] a) {
 	    if (a.length < size()) {
 	        a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size());
-	    }
-	    
+	    }    
 	    int index = 0;
 	    Node<E> auxNode = head;
-	    
 	    while (auxNode != null) {
 	        a[index++] = (T) auxNode.getData();
 	        auxNode = auxNode.getNext();
@@ -106,7 +103,6 @@ public class MyList<E> implements List<E>{
 	    if (a.length > size()) {
 	        a[size()] = null;
 	    }
-	    
 	    return a;
 	}
 
@@ -206,12 +202,10 @@ public class MyList<E> implements List<E>{
 		}
 	}
 	
-	//AJUSTE DEL METODO removeAll
 	@Override
 	public boolean removeAll(Collection<?> c) {
 	    verifyNullity(c);
 	    boolean modified = false;
-
 	    for (Object element : c) {
 	        if (remove(element)) {
 	            modified = true;
@@ -221,7 +215,6 @@ public class MyList<E> implements List<E>{
 	    return modified;
 	}
 
-	//AJUSTE DEL METODO retainAll
 	@Override
 	public boolean retainAll(Collection<?> c) {
 	    verifyNullity(c);
@@ -238,7 +231,6 @@ public class MyList<E> implements List<E>{
 	    
 	    return modified;
 	}
-
 
 	@Override
 	public E get(int index){
@@ -342,7 +334,6 @@ public class MyList<E> implements List<E>{
         return index;
 	}
 	
-	//NUEVO METODO subList
 	@Override
 	public List<E> subList(int fromIndex, int toIndex) {
 	    indexOutOfRange(fromIndex);
@@ -380,11 +371,8 @@ public class MyList<E> implements List<E>{
 		return null;
 	}
 
-	
-
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		head=null;
 	}
 }
