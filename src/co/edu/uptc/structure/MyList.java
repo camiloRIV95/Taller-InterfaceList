@@ -88,12 +88,28 @@ public class MyList<E> implements List<E>{
 		}
 		return rta;
 	}
-
+	
+	//Implementacion del metodo toArray
 	@Override
 	public <T> T[] toArray(T[] a) {
-		// TODO Auto-generated method stub
-		return null;
+	    if (a.length < size()) {
+	        a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size());
+	    }
+	    
+	    int index = 0;
+	    Node<E> auxNode = head;
+	    
+	    while (auxNode != null) {
+	        a[index++] = (T) auxNode.getData();
+	        auxNode = auxNode.getNext();
+	    }
+	    if (a.length > size()) {
+	        a[size()] = null;
+	    }
+	    
+	    return a;
 	}
+
 
 	@Override
 	public boolean add(E e){
@@ -189,37 +205,40 @@ public class MyList<E> implements List<E>{
     		return true;
 		}
 	}
-
+	
+	//AJUSTE DEL METODO removeAll
 	@Override
-	public boolean removeAll(Collection<?> c){
-		verifyCasting(c);
-		if (c.isEmpty()) {
-            return false;
-        }else{
-        	for (Object element : c) {
-    			verifyNullity(element);
-        	}
-        }
-		return false;
+	public boolean removeAll(Collection<?> c) {
+	    verifyNullity(c);
+	    boolean modified = false;
+
+	    for (Object element : c) {
+	        if (remove(element)) {
+	            modified = true;
+	        }
+	    }
+	    
+	    return modified;
 	}
 
+	//AJUSTE DEL METODO retainAll
 	@Override
-	public boolean retainAll(Collection<?> c){
-		verifyCasting(c);
-		if (c.isEmpty()) {
-            return false;
-        }else{
-        	for (Object element : c) {
-    			verifyNullity(element);
-        	}
-        }
-		return false;
+	public boolean retainAll(Collection<?> c) {
+	    verifyNullity(c);
+	    boolean modified = false;
+
+	    Node<E> auxNode = head;
+	    while (auxNode != null) {
+	        if (!c.contains(auxNode.getData())) {
+	            remove(auxNode.getData());
+	            modified = true;
+	        }
+	        auxNode = auxNode.getNext();
+	    }
+	    
+	    return modified;
 	}
 
-	@Override
-	public void clear() {
-		head=null;
-	}
 
 	@Override
 	public E get(int index){
@@ -322,6 +341,32 @@ public class MyList<E> implements List<E>{
         }
         return index;
 	}
+	
+	//NUEVO METODO subList
+	@Override
+	public List<E> subList(int fromIndex, int toIndex) {
+	    indexOutOfRange(fromIndex);
+	    indexOutOfRange(toIndex);
+	    
+	    if (fromIndex > toIndex) {
+	        throw new IllegalArgumentException("El índice de inicio no puede ser mayor que el índice final.");
+	    }
+	    
+	    List<E> sublist = new MyList<>();
+	    Node<E> auxNode = head;
+	    int currentIndex = 0;
+	    
+	    while (auxNode != null && currentIndex < toIndex) {
+	        if (currentIndex >= fromIndex) {
+	            sublist.add(auxNode.getData());
+	        }
+	        auxNode = auxNode.getNext();
+	        currentIndex++;
+	    }
+	    
+	    return sublist;
+	}
+
 
 	@Override
 	public ListIterator<E> listIterator() {
@@ -335,9 +380,11 @@ public class MyList<E> implements List<E>{
 		return null;
 	}
 
+	
+
 	@Override
-	public List<E> subList(int fromIndex, int toIndex) {
+	public void clear() {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 }
